@@ -1,15 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { BannerItem } from '@/types/home'
-
-const list = ref<BannerItem[]>([
-  {
-    id: '1',
-    hrefUrl: 'https://wanmayoucai.com/',
-    imageUrl: 'https://wanmayoucai.com/_nuxt/banner01.By2QuXUo.png',
-    type: 0,
-  },
-])
+// 获取屏幕边界到安全区域距离
+const { safeAreaInsets } = uni.getSystemInfoSync()
 </script>
 
 <template>
@@ -26,8 +17,6 @@ const list = ref<BannerItem[]>([
       <view class="icon-scan"></view>
     </view>
   </view>
-
-  <XtxSwiper :list="list"></XtxSwiper>
 </template>
 
 <style lang="scss">

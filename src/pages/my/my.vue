@@ -6,7 +6,7 @@ const memberStore = useMemberStore()
 // 测试请求
 const getData = async () => {
   const res = await http<number[]>({
-    url: '',
+    url: 'https://test-bapi.wanmashijie.com/wm-common/common/position/searchPosition?searchKey=前端',
     method: 'GET',
     header: {},
   })

@@ -1,6 +1,6 @@
 {
   "name": "小兔鲜儿",
-  "appid": "wxb0cedfe8706b9fa7",
+  "appid": "",
   "description": "",
   "versionName": "1.0.0",
   "versionCode": 1,
@@ -50,7 +50,7 @@
   "quickapp": {},
   /* 小程序特有相关 */
   "mp-weixin": {
-    "appid": "",
+    "appid": "wxb0cedfe8706b9fa7",
     "setting": {
       "urlCheck": false
     },
