@@ -10,7 +10,7 @@ export type BannerItem = {
   /**
    * 图片链接
    */
-  imageUrl: string
+  imgUrl: string
   /**
    * 跳转类型
    */

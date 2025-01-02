@@ -10,7 +10,6 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
       <image class="logo-image" src="@/static/images/logo.png"></image>
       <text class="logo-text">新鲜 · 亲民 · 快捷</text>
     </view>
-
     <!-- 搜索条 -->
     <view class="search">
       <view class="icon-search">搜索商品</view>
