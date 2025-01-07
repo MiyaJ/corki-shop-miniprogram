@@ -6,6 +6,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '../../services/home'
 import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
+import type { XtxGuessInstance } from '@/types/component'
 
 const bannerList = ref<BannerItem[]>([])
 
@@ -33,15 +34,44 @@ onLoad(() => {
   getHomeCategoryData()
   getHomeHotData()
 })
+
+// 获取猜你喜欢组件
+const guessRef = ref<XtxGuessInstance>()
+// 触底加载
+const onScrolltolower = () => {
+  console.log('触底了')
+  guessRef?.value?.getMore()
+}
+
+// 下拉刷新是触发
+const onRefresherrefresh = async () => {
+  console.log('下拉刷新')
+  // 开启动画
+  isTriggered.value = true
+  // 重置数据
+  guessRef?.value?.resetData()
+  // 加载数据
+  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHomeHotData()])
+  // 关闭动画
+  isTriggered.value = false
+}
+const isTriggered = ref(false)
 </script>
 
 <template>
   <CustomNavbar />
-  <scroll-view class="scroll-view" scroll-y>
+  <scroll-view
+    class="scroll-view"
+    @scrolltolower="onScrolltolower"
+    refresher-enabled
+    :refresher-triggered="isTriggered"
+    @refresherrefresh="onRefresherrefresh"
+    scroll-y
+  >
     <XtxSwiper :list="bannerList" />
     <CategoryPanel :list="categoryList" />
     <HotPanel :list="hostList" />
-    <XtxGuess />
+    <XtxGuess ref="guessRef" />
   </scroll-view>
 </template>
 

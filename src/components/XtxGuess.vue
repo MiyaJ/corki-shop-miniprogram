@@ -4,16 +4,48 @@ import type { PageParams, PageResult } from '@/types/global'
 import { ref, onMounted } from 'vue'
 import { getHomeGoodsGuessLikeAPI } from '@/services/home'
 
+// 分页参数
+const pageParams: Required<PageParams> = {
+  page: 1,
+  pageSize: 10,
+}
+const finish = ref(false)
 // 猜你喜欢数据
 const guessList = ref<GuessItem[]>([])
 // 获取猜你喜欢
 const getHomeGoodsGuessLikeData = async () => {
-  const res = await getHomeGoodsGuessLikeAPI()
-  guessList.value = res.result.items
+  const res = await getHomeGoodsGuessLikeAPI(pageParams)
+  if (finish.value == true) {
+    return uni.showToast({
+      title: '没有更多数据了',
+      icon: 'none',
+    })
+  }
+  // 数据追加
+  guessList.value.push(...res.result.items)
+  // 分页条件
+  if (pageParams.page < res.result.pages) {
+    // 页码累加
+    pageParams.page++
+  } else {
+    finish.value = true
+  }
 }
 // 组件挂在完成
 onMounted(() => {
   getHomeGoodsGuessLikeData()
+})
+// 重置数据
+const resetData = () => {
+  guessList.value = []
+  pageParams.page = 1
+  finish.value = false
+}
+
+// 暴露方法
+defineExpose({
+  resetData,
+  getMore: getHomeGoodsGuessLikeData,
 })
 </script>
 
