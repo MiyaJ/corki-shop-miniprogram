@@ -69,7 +69,7 @@ defineExpose({
       </view>
     </navigator>
   </view>
-  <view class="loading-text"> 正在加载... </view>
+  <view class="loading-text"> {{ finish ? '没有更多数据~' : '正在加载...' }}</view>
 </template>
 
 <style lang="scss">
