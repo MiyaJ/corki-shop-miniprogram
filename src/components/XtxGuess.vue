@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import type { GuessItem } from '@/types/home'
-defineProps<{
-  list: GuessItem[]
-}>()
+import type { PageParams, PageResult } from '@/types/global'
+import { ref, onMounted } from 'vue'
+import { getHomeGoodsGuessLikeAPI } from '@/services/home'
+
+// 猜你喜欢数据
+const guessList = ref<GuessItem[]>([])
+// 获取猜你喜欢
+const getHomeGoodsGuessLikeData = async () => {
+  const res = await getHomeGoodsGuessLikeAPI()
+  guessList.value = res.result.items
+}
+// 组件挂在完成
+onMounted(() => {
+  getHomeGoodsGuessLikeData()
+})
 </script>
 
 <template>
@@ -13,9 +25,9 @@ defineProps<{
   <view class="guess">
     <navigator
       class="guess-item"
-      v-for="item in list"
+      v-for="item in guessList"
       :key="item.id"
-      :url="`/pages/goods/goods?id=4007498`"
+      :url="`/pages/goods/goods?id=${item.id}`"
     >
       <image class="image" mode="aspectFill" :src="item.picture"></image>
       <view class="name"> {{ item.name }} </view>

@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { BannerItem, CategoryItem, GuessItem, HotItem } from '@/types/home'
+import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
 import CustomNavbar from './components/CustomNavbar.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import {
-  getHomeBannerAPI,
-  getHomeCategoryAPI,
-  getHomeHotAPI,
-  getHomeGoodsGuessLikeAPI,
-} from '../../services/home'
+import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '../../services/home'
 import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
-import type { PageResult } from '@/types/global'
 
 const bannerList = ref<BannerItem[]>([])
 
@@ -34,28 +28,32 @@ const getHomeHotData = async () => {
   hostList.value = res.result
 }
 
-// 猜你喜欢
-const guessList = ref<GuessItem[]>([])
-const getHomeGoodsGuessLikeData = async () => {
-  const res = await getHomeGoodsGuessLikeAPI()
-  guessList.value = res.result.items
-  console.log('guessList: ', guessList)
-}
-
 onLoad(() => {
   getHomeBannerData()
   getHomeCategoryData()
   getHomeHotData()
-  getHomeGoodsGuessLikeData()
 })
 </script>
 
 <template>
   <CustomNavbar />
-  <XtxSwiper :list="bannerList" />
-  <CategoryPanel :list="categoryList" />
-  <HotPanel :list="hostList" />
-  <XtxGuess :list="guessList" />
+  <scroll-view class="scroll-view" scroll-y>
+    <XtxSwiper :list="bannerList" />
+    <CategoryPanel :list="categoryList" />
+    <HotPanel :list="hostList" />
+    <XtxGuess />
+  </scroll-view>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+page {
+  background-color: #f7f7f7;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-view {
+  flex: 1;
+}
+</style>
