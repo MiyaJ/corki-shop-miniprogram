@@ -6,7 +6,7 @@ import type { GoodsResult } from '@/types/goods'
 import { onLoad } from '@dcloudio/uni-app'
 import ServicePanel from './components/ServicePanel.vue'
 import AddressPanel from './components/AddressPanel.vue'
-import PackageSkeleton from './components/PackageSkeleton.vue'
+import PackageSkeleton from './PackageSkeleton.vue'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
