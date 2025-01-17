@@ -19,13 +19,9 @@ const member = useMemberStore()
     <!-- 个人资料 -->
     <view class="profile" :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
       <!-- 情况1：已登录 -->
-      <view class="overview" v-if="false">
+      <view class="overview" v-if="member.profile">
         <navigator url="/pagesMember/profile/profile" hover-class="none">
-          <image
-            class="avatar"
-            mode="aspectFill"
-            src="https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/uploads/avatar_3.jpg"
-          ></image>
+          <image class="avatar" mode="aspectFill" :src="member.profile.avatar"></image>
         </navigator>
         <view class="meta">
           <view class="nickname"> {{ member.profile?.nickname }} </view>
