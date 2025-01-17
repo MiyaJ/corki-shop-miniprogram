@@ -80,6 +80,7 @@ const test = () => {
           <!-- 通用模拟登录 -->
           <button
             class="button phone"
+            style="height: 220rpx"
             open-type="getPhoneNumber"
             @getphonenumber="onGetphonenumberSimple"
           >
