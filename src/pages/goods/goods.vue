@@ -4,6 +4,10 @@ import { ref } from 'vue'
 import { getGoodsByIdAPI } from '@/services/goods'
 import type { GoodsResult } from '@/types/goods'
 import { onLoad } from '@dcloudio/uni-app'
+import ServicePanel from './components/ServicePanel.vue'
+import AddressPanel from './components/AddressPanel.vue'
+import PackageSkeleton from './components/PackageSkeleton.vue'
+
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -33,14 +37,29 @@ const previewImage = (url: string) => {
   })
 }
 
+// 弹出层
+const popup = ref<{
+  open: (type?: UniHelper.UniPopupType) => void
+  close: () => void
+}>()
+const popupName = ref<'address' | 'service'>()
+const openPopup = (name: typeof popupName.value) => {
+  // 修改弹出层
+  popupName.value = name
+  // 打开弹出层
+  popup.value?.open('bottom')
+}
+
 // 页面加载
-onLoad(() => {
-  getGoodsByIdData()
+const isFinish = ref(false)
+onLoad(async () => {
+  await Promise.all([getGoodsByIdData()])
+  isFinish.value = true
 })
 </script>
 
 <template>
-  <scroll-view scroll-y class="viewport">
+  <scroll-view scroll-y class="viewport" v-if="isFinish">
     <!-- 基本信息 -->
     <view class="goods">
       <!-- 商品主图 -->
@@ -73,15 +92,23 @@ onLoad(() => {
           <text class="label">选择</text>
           <text class="text ellipsis"> 请选择商品规格 </text>
         </view>
-        <view class="item arrow">
+        <view class="item arrow" @tap="openPopup('address')">
           <text class="label">送至</text>
           <text class="text ellipsis"> 请选择收获地址 </text>
         </view>
-        <view class="item arrow">
+        <view class="item arrow" @tap="openPopup('service')">
           <text class="label">服务</text>
           <text class="text ellipsis"> 无忧退 快速退款 免费包邮 </text>
         </view>
       </view>
+    </view>
+
+    <!-- uni-ui 弹出层 -->
+    <view>
+      <uni-popup ref="popup" type="bottom" background-color="#fff">
+        <ServicePanel v-if="popupName === 'service'" @close="popup?.close()" />
+        <AddressPanel v-if="popupName === 'address'" @close="popup?.close()" />
+      </uni-popup>
     </view>
 
     <!-- 商品详情 -->
@@ -130,6 +157,7 @@ onLoad(() => {
       </view>
     </view>
   </scroll-view>
+  <PackageSkeleton v-else />
 
   <!-- 用户操作 -->
   <view class="toolbar" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }">

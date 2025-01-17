@@ -5,6 +5,7 @@ import { getCategoryTopAPI } from '@/services/category'
 import type { BannerItem } from '@/types/home'
 import type { CategoryTopItem } from '@/types/category'
 import { getHomeBannerAPI } from '@/services/home'
+import PageSkeleton from './PageSkeleton.vue'
 
 // 获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
