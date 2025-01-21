@@ -7,7 +7,12 @@ import { onLoad } from '@dcloudio/uni-app'
 import ServicePanel from './components/ServicePanel.vue'
 import AddressPanel from './components/AddressPanel.vue'
 import PackageSkeleton from './PackageSkeleton.vue'
-import type { SkuPopupInstanceType, SkuPopupLocaldata } from '@/types/vk-data-goods-sku-popup'
+import type {
+  SkuPopupEvent,
+  SkuPopupInstanceType,
+  SkuPopupLocaldata,
+} from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import { postMemberCartAPI } from '@/services/cart'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -94,6 +99,16 @@ const openPopup = (name: typeof popupName.value) => {
   popup.value?.open('bottom')
 }
 
+// 添加购物车
+const onAddCart = async (ev: SkuPopupEvent) => {
+  await postMemberCartAPI({
+    skuId: ev._id,
+    count: ev.buy_num,
+  })
+  uni.showToast({ title: '添加购物车成功', icon: 'success' })
+  isShowSku.value = false
+}
+
 // 页面加载
 const isFinish = ref(false)
 onLoad(async () => {
@@ -107,6 +122,7 @@ onLoad(async () => {
   <vk-data-goods-sku-popup
     v-model="isShowSku"
     :localdata="localdata"
+    @add-cart="onAddCart"
     :mode="mode"
     add-cart-background-color="#FFA868"
     buy-now-background-color="#27BA9B"
@@ -230,8 +246,8 @@ onLoad(async () => {
       </navigator>
     </view>
     <view class="buttons">
-      <view class="addcart"> 加入购物车 </view>
-      <view class="buynow"> 立即购买 </view>
+      <view class="addcart" @tap="openSkuPopup(SkuMode.Cart)"> 加入购物车 </view>
+      <view class="buynow" @tap="openSkuPopup(SkuMode.Buy)"> 立即购买 </view>
     </view>
   </view>
 </template>
